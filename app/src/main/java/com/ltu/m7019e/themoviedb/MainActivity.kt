@@ -31,6 +31,9 @@ import com.ltu.m7019e.themoviedb.database.Movies
 import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.ui.theme.TheMovieDBTheme
 import com.ltu.m7019e.themoviedb.utils.Constants
+import androidx.navigation.compose.rememberNavController
+import com.ltu.m7019e.themoviedb.navigation.AppNavGraph
+
 
     class MainActivity : ComponentActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +53,10 @@ import com.ltu.m7019e.themoviedb.utils.Constants
 
 @Composable
 fun TheMovieDBApp(){
-    MovieList(movielist = Movies().getMovies())
+    val navController = rememberNavController()
+    val movieList = Movies().getMovies()
+
+    AppNavGraph(navController = navController, movieList = movieList)
 
 }
 
@@ -110,13 +116,15 @@ fun GreetingPreview() {
     TheMovieDBTheme {
         MovieListItemCard(
             movie = Movie(
-                1,
-                "A Minecraft Movie",
-                "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
-                "/is9bmV6uYXu7LjZGJczxrjJDlv8.jpg",
-                "2025-03-31",
-                "By day, they're invisible—valets, hostesses, and bartenders at a luxury hotel. By night, they're the Carjackers, a crew of skilled drivers who track and rob wealthy clients on the road. As they plan their ultimate heist, the hotel director hires a ruthless hitman, to stop them at all costs. With danger closing in, can Nora, Zoe, Steve, and Prestance pull off their biggest score yet?"
-            ))
+                id = 1,
+                title = "A Minecraft Movie",
+                posterPath = "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
+                backdropPath = "/is9bmV6uYXu7LjZGJczxrjJDlv8.jpg",
+                releaseDate = "2025-03-31",
+                overview = "By day, they're invisible—valets, hostesses, and bartenders at a luxury hotel. By night, they're the Carjackers, a crew of skilled drivers who track and rob wealthy clients on the road. As they plan their ultimate heist, the hotel director hires a ruthless hitman, to stop them at all costs. With danger closing in, can Nora, Zoe, Steve, and Prestance pull off their biggest score yet?",
+                genres = listOf("Action", "Heist", "Thriller"),
+                homepage = "https://example.com/minecraft-movie",
+                imdbId = "tt1234567"))
 
     }
 }
