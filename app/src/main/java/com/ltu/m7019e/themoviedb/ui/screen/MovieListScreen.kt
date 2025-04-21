@@ -1,4 +1,6 @@
+/*
 package com.ltu.m7019e.themoviedb.ui
+
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,3 +57,4 @@ fun MovieListItemCard(movie: Movie, onClick: () -> Unit) {
         }
     }
 }
+ */

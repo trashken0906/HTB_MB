@@ -7,8 +7,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.ui.MovieDetailsScreen
-import com.ltu.m7019e.themoviedb.ui.MovieListScreen
+//import com.ltu.m7019e.themoviedb.ui.MovieListScreen
 import com.ltu.m7019e.themoviedb.ui.ThirdScreen
+import com.ltu.m7019e.themoviedb.ui.screen.MovieGridScreen
 
 @Composable
 fun AppNavGraph(
@@ -17,7 +18,7 @@ fun AppNavGraph(
 ) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(route = Screen.Home.route) {
-            MovieListScreen(
+            MovieGridScreen(
                 movieList = movieList,
                 onMovieClick = { movieId ->
                     navController.navigate(Screen.MovieDetails.createRoute(movieId))

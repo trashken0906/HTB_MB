@@ -45,10 +45,18 @@ import com.ltu.m7019e.themoviedb.ui.screen.MovieGridScreen
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        val movieList = Movies().getMovies()
-                        MovieGridScreen(movieList = movieList)
+                        TheMovieDBApp()
                     }
                 }
             }
         }
+    }
+
+    @Composable
+    fun TheMovieDBApp(){
+        val navController = rememberNavController()
+        val movieList = Movies().getMovies()
+
+        AppNavGraph(navController = navController, movieList = movieList)
+
     }
