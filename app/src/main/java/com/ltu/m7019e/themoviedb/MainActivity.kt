@@ -33,6 +33,7 @@ import com.ltu.m7019e.themoviedb.ui.theme.TheMovieDBTheme
 import com.ltu.m7019e.themoviedb.utils.Constants
 import androidx.navigation.compose.rememberNavController
 import com.ltu.m7019e.themoviedb.navigation.AppNavGraph
+import com.ltu.m7019e.themoviedb.ui.screen.MovieGridScreen
 
 
     class MainActivity : ComponentActivity() {
@@ -40,91 +41,14 @@ import com.ltu.m7019e.themoviedb.navigation.AppNavGraph
             super.onCreate(savedInstanceState)
             setContent {
                 TheMovieDBTheme {
-                    Surface (
+                    Surface(
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                    TheMovieDBApp()
+                        val movieList = Movies().getMovies()
+                        MovieGridScreen(movieList = movieList)
+                    }
                 }
             }
         }
     }
-    }
-
-@Composable
-fun TheMovieDBApp(){
-    val navController = rememberNavController()
-    val movieList = Movies().getMovies()
-
-    AppNavGraph(navController = navController, movieList = movieList)
-
-}
-
-@Composable
-fun MovieList(movielist: List<Movie>, modifier: Modifier = Modifier){
-    LazyColumn(modifier = modifier) {
-        items(movielist){movie ->
-            MovieListItemCard(
-                movie = movie,
-                modifier = Modifier.padding(8.dp))
-
-        }
-    }
-
-}
-
-@Composable
-fun MovieListItemCard(movie: Movie, modifier: Modifier = Modifier){
-    Card (modifier = Modifier){
-        Row {
-            Box {
-                AsyncImage(
-                    model = Constants.POSTER_IMAGE_BASE_URL + Constants.POSTER_IMAGE_WIDTH + movie.posterPath,
-                    contentDescription = movie.title,
-                    modifier = modifier
-                        .width(92.dp)
-                        .height(138.dp),
-                    contentScale = ContentScale.Crop
-                )
-
-            }
-            Column {
-                Text(
-                    text = movie.title,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = movie.releaseDate,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = movie.overview,
-                    style = MaterialTheme.typography.bodySmall,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-            }
-        }
-    }
-}
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TheMovieDBTheme {
-        MovieListItemCard(
-            movie = Movie(
-                id = 1,
-                title = "A Minecraft Movie",
-                posterPath = "/yFHHfHcUgGAxziP1C3lLt0q2T4s.jpg",
-                backdropPath = "/is9bmV6uYXu7LjZGJczxrjJDlv8.jpg",
-                releaseDate = "2025-03-31",
-                overview = "By day, they're invisible—valets, hostesses, and bartenders at a luxury hotel. By night, they're the Carjackers, a crew of skilled drivers who track and rob wealthy clients on the road. As they plan their ultimate heist, the hotel director hires a ruthless hitman, to stop them at all costs. With danger closing in, can Nora, Zoe, Steve, and Prestance pull off their biggest score yet?",
-                genres = listOf("Action", "Heist", "Thriller"),
-                homepage = "https://example.com/minecraft-movie",
-                imdbId = "tt1234567"))
-
-    }
-}
