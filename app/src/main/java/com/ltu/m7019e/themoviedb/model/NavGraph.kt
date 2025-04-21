@@ -1,11 +1,11 @@
-package com.ltu.m7019e.themoviedb.navigation
+package com.ltu.m7019e.themoviedb.model
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.ltu.m7019e.themoviedb.model.Movie
+import com.ltu.m7019e.themoviedb.navigation.Screen
 import com.ltu.m7019e.themoviedb.ui.MovieDetailsScreen
 //import com.ltu.m7019e.themoviedb.ui.MovieListScreen
 import com.ltu.m7019e.themoviedb.ui.ThirdScreen
