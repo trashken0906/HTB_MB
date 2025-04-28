@@ -6,16 +6,20 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ltu.m7019e.themoviedb.database.Movies
 import com.ltu.m7019e.themoviedb.navigation.Screen
+import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
 
 @Composable
-fun MovieDetailsScreen(movieId: Long, navController: NavHostController) {
-    val movie = Movies().getMovies().find { it.id == movieId }
+fun MovieDetailsScreen(navController: NavHostController, viewModel: MovieDBViewModel, movieId: Long, apiKey: String) {
+    val uiState by viewModel.uiState.collectAsState()
+    val movie = uiState.selectedMovie
     val context = LocalContext.current
 
     Column(modifier = Modifier.padding(16.dp)) {
@@ -63,11 +67,11 @@ fun MovieDetailsScreen(movieId: Long, navController: NavHostController) {
 
         Button(
             onClick = {
-                navController.navigate(Screen.ThirdScreen.route)
+                navController.navigate(Screen.MovieReview.createRoute(movieId))
             },
             modifier = Modifier.padding(top = 24.dp)
         ) {
-            Text("Go to Third Screen")
+            Text("View Reviews & Trailers")
         }
     }
 }

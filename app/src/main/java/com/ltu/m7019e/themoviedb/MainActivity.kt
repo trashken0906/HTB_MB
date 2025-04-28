@@ -8,10 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ltu.m7019e.themoviedb.database.Movies
 import com.ltu.m7019e.themoviedb.ui.theme.TheMovieDBTheme
 import androidx.navigation.compose.rememberNavController
-import com.ltu.m7019e.themoviedb.model.AppNavGraph
+import com.ltu.m7019e.themoviedb.navigation.AppNavGraph
+import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
 
 
     class MainActivity : ComponentActivity() {
@@ -19,22 +21,25 @@ import com.ltu.m7019e.themoviedb.model.AppNavGraph
             super.onCreate(savedInstanceState)
             setContent {
                 TheMovieDBTheme {
-                    Surface(
+                    Surface (
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        TheMovieDBApp()
-                    }
+                    TheMovieDBApp()
                 }
             }
         }
     }
-
-    @Composable
-    fun TheMovieDBApp(){
-        val navController = rememberNavController()
-        val movieList = Movies().getMovies()
-
-        AppNavGraph(navController = navController, movieList = movieList)
-
     }
+
+@Composable
+fun TheMovieDBApp(){
+    val navController = rememberNavController()
+    val movieList = Movies().getMovies()
+    val viewModel: MovieDBViewModel = viewModel()
+
+    AppNavGraph(navController = navController, movieList = movieList, viewModel = viewModel)
+}
+
+
+

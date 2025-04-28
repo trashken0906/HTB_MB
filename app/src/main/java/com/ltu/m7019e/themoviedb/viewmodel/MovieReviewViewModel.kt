@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ltu.m7019e.themoviedb.model.Review
 import com.ltu.m7019e.themoviedb.model.Video
+import com.ltu.m7019e.themoviedb.network.RetrofitInstance
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class MovieReviewViewModel : ViewModel {
+class MovieReviewViewModel : ViewModel() {
+
     private val _reviews = MutableStateFlow<List<Review>>(emptyList())
     val reviews: StateFlow<List<Review>> = _reviews
 
@@ -18,13 +20,17 @@ class MovieReviewViewModel : ViewModel {
     fun fetchMovieDetails(movieId: Long, apiKey: String) {
         viewModelScope.launch {
             try {
-                val reviewResponse = tmdbApi.getReviews(movieId, apiKey)
-                _reviews.value = reviewResponse.results
+                val reviewResponse = RetrofitInstance.api.getMovieReviews(movieId, apiKey)
+                val videoResponse = RetrofitInstance.api.getMovieVideos(movieId, apiKey)
 
-                val videoResponse = tmdbApi.getVideos(movieId, apiKey)
-                _videos.value = videoResponse.results.filter { it.site == "YouTube" }
+                println("Fetched Reviews: ${reviewResponse.results.size}")
+                println("Fetched Videos: ${videoResponse.results.size}") // print log
+
+                _reviews.value = reviewResponse.results
+                _videos.value = videoResponse.results
+
             } catch (e: Exception) {
-                // Handle exceptions
+                e.printStackTrace()
             }
         }
     }

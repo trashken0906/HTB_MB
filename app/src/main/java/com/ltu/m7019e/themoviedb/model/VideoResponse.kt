@@ -4,10 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Review(
-    @SerialName("author")
-    val author: String,
-
-    @SerialName("content")
-    val content: String
+data class VideoResponse(
+    @SerialName("results")
+    val results: List<Video>
 )

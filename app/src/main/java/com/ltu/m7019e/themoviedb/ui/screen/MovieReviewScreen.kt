@@ -1,50 +1,64 @@
-package com.ltu.m7019e.themoviedb.ui
+package com.ltu.m7019e.themoviedb.ui.screen
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import com.ltu.m7019e.themoviedb.viewmodel.MovieDetailsViewModel
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.ltu.m7019e.themoviedb.viewmodel.MovieReviewViewModel
+import com.ltu.m7019e.themoviedb.ui.components.VideoPlayer
 
 @Composable
-    fun MovieReviewScreen(movieId: Long, apiKey: String, viewModel: MovieDetailsViewModel = viewModel()) {
-        val reviews by viewModel.reviews.collectAsState()
-        val videos by viewModel.videos.collectAsState()
+fun MovieReviewScreen(
+    movieId: Long,
+    apiKey: String,
+    viewModel: MovieReviewViewModel = viewModel()
+) {
+    val reviews by viewModel.reviews.collectAsState()
+    val videos by viewModel.videos.collectAsState()
 
-        LaunchedEffect(movieId) {
-            viewModel.fetchMovieDetails(movieId, apiKey)
-        }
+    // Fetch the movie details (reviews + videos) once when screen loads
+    LaunchedEffect(movieId) {
+        viewModel.fetchMovieDetails(movieId, apiKey)
+    }
 
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            Text("Reviews", style = MaterialTheme.typography.headlineSmall)
-            LazyRow {
-                items(reviews) { review ->
-                    Card(modifier = Modifier.padding(8.dp).width(300.dp)) {
-                        Column(modifier = Modifier.padding(8.dp)) {
-                            Text("Author: ${review.author}", style = MaterialTheme.typography.bodyMedium)
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(review.content, maxLines = 3, overflow = TextOverflow.Ellipsis)
-                        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // Reviews section
+        Text(text = "Reviews", style = MaterialTheme.typography.headlineSmall)
+        LazyRow {
+            items(reviews) { review ->
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(250.dp)
+                ) {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(text = review.author)
+                        Text(text = review.content, maxLines = 2)
                     }
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Trailers", style = MaterialTheme.typography.headlineSmall)
-            LazyRow {
-                items(videos) { video ->
-                    VideoPlayer(videoKey = video.key)
-                }
+        // Videos section
+        Text(text = "Trailers", style = MaterialTheme.typography.headlineSmall)
+        LazyRow {
+            items(videos) { video ->
+                VideoPlayer(videoKey = video.key)
             }
         }
     }

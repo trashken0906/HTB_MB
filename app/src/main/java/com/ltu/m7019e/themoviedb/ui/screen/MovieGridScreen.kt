@@ -16,17 +16,23 @@ import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.utils.Constants
 
 @Composable
-fun MovieGridScreen(movieList: List<Movie>, onMovieClick: (Long) -> Unit) {
-    // Create a LazyVerticalGrid with 2 columns per row
+fun MovieGridScreen(
+    movieList: List<Movie>,
+    onMovieClick: (Long) -> Unit
+) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // Number of columns
+        columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize().padding(8.dp)
     ) {
         items(movieList) { movie ->
-            MovieGridItem(movie = movie, onClick = { onMovieClick(movie.id) })
+            MovieGridItem(
+                movie = movie,
+                onClick = { onMovieClick(movie.id) }
+            )
         }
     }
 }
+
 
 @Composable
 fun MovieGridItem(movie: Movie, onClick: () -> Unit) {
