@@ -6,30 +6,24 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Movie(
-    @SerialName(value = "id")
-    var id: Long = 0L,
+    @SerialName("id")
+    val id: Long = 0,
 
-    @SerialName(value = "title")
-    var title: String,
+    @SerialName("title")
+    val title: String = "",
 
-    @SerialName(value = "poster_path")
-    var posterPath: String,
+    @SerialName("poster_path")
+    val posterPath: String = "",
 
-    @SerialName(value = "backdrop_path")
-    var backdropPath: String,
+    @SerialName("backdrop_path")
+    val backdropPath: String? = null,
 
-    @SerialName(value = "release_date")
-    var releaseDate: String,
+    @SerialName("release_date")
+    val releaseDate: String = "",
 
-    @SerialName(value = "overview")
-    var overview: String,
+    @SerialName("overview")
+    val overview: String = "",
 
-    @SerialName(value = "genres")
-    var genres: List<String>,
-
-    @SerialName(value = "homepage")
-    var homepage: String,
-
-    @SerialName(value = "imdbID")
-    var imdbId: String,
+    @SerialName("genre_ids")
+    val genreIds: List<Int> = emptyList()  // TMDB popular gives genre IDs
 )

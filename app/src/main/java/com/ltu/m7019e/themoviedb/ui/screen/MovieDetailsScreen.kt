@@ -12,66 +12,93 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.ltu.m7019e.themoviedb.database.Movies
+import androidx.compose.runtime.*
 import com.ltu.m7019e.themoviedb.navigation.Screen
 import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
 
+
+
+
 @Composable
-fun MovieDetailsScreen(navController: NavHostController, viewModel: MovieDBViewModel, movieId: Long, apiKey: String) {
-    val uiState by viewModel.uiState.collectAsState()
-    val movie = uiState.selectedMovie
+fun MovieDetailsScreen(
+    navController: NavHostController,
+    viewModel: MovieDBViewModel,
+    movieId: Long,
+    apiKey: String
+) {
+    val movie by viewModel.movieDetail.collectAsState()
     val context = LocalContext.current
+
+    LaunchedEffect(movieId) {
+        viewModel.fetchMovieDetail(movieId, apiKey)
+    }
 
     Column(modifier = Modifier.padding(16.dp)) {
         if (movie != null) {
-            Text(text = movie.title, style = MaterialTheme.typography.headlineMedium)
-            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = movie!!.title, style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(text = "Genres:", style = MaterialTheme.typography.titleMedium)
-            Text(text = movie.genres.joinToString(", "))
+            Text(text = movie!!.genres.joinToString(", ") { it.name })
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "Homepage:", style = MaterialTheme.typography.titleMedium)
-            Text(
-                text = movie.homepage,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(movie.homepage))
-                    context.startActivity(intent)
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(text = "Open in IMDb App:", style = MaterialTheme.typography.titleMedium)
-            Text(
-                text = "https://www.imdb.com/title/${movie.imdbId}/",
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {
-                    val imdbIntent = Intent(Intent.ACTION_VIEW).apply {
-                        data = Uri.parse("imdb://title/${movie.imdbId}")
-                        setPackage("com.imdb.mobile")
+            movie!!.homepage?.let {
+                Text(text = "Homepage:", style = MaterialTheme.typography.titleMedium)
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable {
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
                     }
-                    if (imdbIntent.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(imdbIntent)
-                    } else {
-                        val webIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.imdb.com/title/${movie.imdbId}/"))
-                        context.startActivity(webIntent)
-                    }
-                }
-            )
-        } else {
-            Text(text = "Movie not found.")
-        }
+                )
+            }
 
-        Button(
-            onClick = {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(text = "IMDb:", style = MaterialTheme.typography.titleMedium)
+
+            if (movie!!.imdbId.isNullOrBlank()) {
+                Text(
+                    text = "No IMDb link available",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                movie!!.imdbId?.let { imdb ->
+                    Text(text = "IMDb Link:", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = "https://www.imdb.com/title/$imdb",
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable {
+                            val imdbIntent = Intent(Intent.ACTION_VIEW).apply {
+                                data = Uri.parse("imdb://title/$imdb")
+                                setPackage("com.imdb.mobile")
+                            }
+                            if (imdbIntent.resolveActivity(context.packageManager) != null) {
+                                context.startActivity(imdbIntent)
+                            } else {
+                                context.startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://www.imdb.com/title/$imdb")
+                                    )
+                                )
+                            }
+                        }
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(onClick = {
                 navController.navigate(Screen.MovieReview.createRoute(movieId))
-            },
-            modifier = Modifier.padding(top = 24.dp)
-        ) {
-            Text("View Reviews & Trailers")
+            }) {
+                Text("View Reviews & Trailers")
+            }
+
+        } else {
+            CircularProgressIndicator(modifier = Modifier.padding(top = 32.dp))
         }
     }
 }

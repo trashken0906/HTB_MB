@@ -45,8 +45,8 @@ fun MovieReviewScreen(
                         .width(250.dp)
                 ) {
                     Column(modifier = Modifier.padding(8.dp)) {
-                        Text(text = review.author)
-                        Text(text = review.content, maxLines = 2)
+                        Text("Author: ${review.author}")
+                        Text(review.content.take(150) + "…")
                     }
                 }
             }

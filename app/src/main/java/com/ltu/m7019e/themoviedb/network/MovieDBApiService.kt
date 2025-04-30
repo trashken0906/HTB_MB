@@ -1,6 +1,7 @@
 package com.ltu.m7019e.themoviedb.network
 
 import android.provider.SyncStateContract
+import com.ltu.m7019e.themoviedb.database.MovieDetail
 import com.ltu.m7019e.themoviedb.model.MovieResponse
 import com.ltu.m7019e.themoviedb.model.ReviewResponse
 import com.ltu.m7019e.themoviedb.model.VideoResponse
@@ -11,17 +12,17 @@ import retrofit2.http.Query
 
 interface MovieDBApiService {
 
-    @GET("popular")
+    @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("api_key")
         apiKey: String = Constants.API_KEY
     ): MovieResponse
 
-    @GET("top_rated")
-    suspend fun getTopRatedMovies(
-        @Query("api_key")
-        apiKey: String = Constants.API_KEY
-    ): MovieResponse
+    @GET("movie/{movie_id}")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movieId: Long,
+        @Query("api_key") apiKey: String
+    ): MovieDetail
 
     @GET("movie/{movie_id}/reviews")
     suspend fun getMovieReviews(

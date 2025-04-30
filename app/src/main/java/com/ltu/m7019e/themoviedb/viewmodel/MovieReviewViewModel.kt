@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ltu.m7019e.themoviedb.model.Review
 import com.ltu.m7019e.themoviedb.model.Video
 import com.ltu.m7019e.themoviedb.network.RetrofitInstance
+import com.ltu.m7019e.themoviedb.utils.SECRETS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,8 +21,8 @@ class MovieReviewViewModel : ViewModel() {
     fun fetchMovieDetails(movieId: Long, apiKey: String) {
         viewModelScope.launch {
             try {
-                val reviewResponse = RetrofitInstance.api.getMovieReviews(movieId, apiKey)
-                val videoResponse = RetrofitInstance.api.getMovieVideos(movieId, apiKey)
+                val reviewResponse = RetrofitInstance.api.getMovieReviews(movieId, SECRETS.API_KEY)
+                val videoResponse = RetrofitInstance.api.getMovieVideos(movieId, SECRETS.API_KEY)
 
                 println("Fetched Reviews: ${reviewResponse.results.size}")
                 println("Fetched Videos: ${videoResponse.results.size}") // print log
