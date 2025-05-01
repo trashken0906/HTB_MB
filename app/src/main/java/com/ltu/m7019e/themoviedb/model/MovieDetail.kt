@@ -1,4 +1,4 @@
-package com.ltu.m7019e.themoviedb.database
+package com.ltu.m7019e.themoviedb.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

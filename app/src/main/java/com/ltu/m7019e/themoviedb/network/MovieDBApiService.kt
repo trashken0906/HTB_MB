@@ -1,7 +1,6 @@
 package com.ltu.m7019e.themoviedb.network
 
-import android.provider.SyncStateContract
-import com.ltu.m7019e.themoviedb.database.MovieDetail
+import com.ltu.m7019e.themoviedb.model.MovieDetail
 import com.ltu.m7019e.themoviedb.model.MovieResponse
 import com.ltu.m7019e.themoviedb.model.ReviewResponse
 import com.ltu.m7019e.themoviedb.model.VideoResponse

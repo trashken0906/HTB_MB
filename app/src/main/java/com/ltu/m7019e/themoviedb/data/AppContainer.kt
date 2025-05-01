@@ -1,6 +1,5 @@
-package com.ltu.m7019e.themoviedb.database
+package com.ltu.m7019e.themoviedb.data
 
-import android.provider.SyncStateContract
 import com.ltu.m7019e.themoviedb.network.MovieDBApiService
 import com.ltu.m7019e.themoviedb.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

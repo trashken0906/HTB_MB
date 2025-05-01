@@ -3,8 +3,8 @@ package com.ltu.m7019e.themoviedb.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.ltu.m7019e.themoviedb.database.MovieDBUIState
-import com.ltu.m7019e.themoviedb.database.MovieDetail
+import com.ltu.m7019e.themoviedb.data.MovieDBUIState
+import com.ltu.m7019e.themoviedb.model.MovieDetail
 import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.network.RetrofitInstance
 import com.ltu.m7019e.themoviedb.utils.SECRETS
