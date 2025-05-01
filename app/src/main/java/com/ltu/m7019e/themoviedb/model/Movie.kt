@@ -13,7 +13,7 @@ data class Movie(
     val title: String = "",
 
     @SerialName("poster_path")
-    val posterPath: String = "",
+    val posterPath: String? = null,
 
     @SerialName("backdrop_path")
     val backdropPath: String? = null,

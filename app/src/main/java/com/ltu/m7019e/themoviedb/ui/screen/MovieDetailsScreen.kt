@@ -56,8 +56,6 @@ fun MovieDetailsScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Text(text = "IMDb:", style = MaterialTheme.typography.titleMedium)
-
             if (movie!!.imdbId.isNullOrBlank()) {
                 Text(
                     text = "No IMDb link available",

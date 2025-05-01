@@ -1,5 +1,6 @@
 package com.ltu.m7019e.themoviedb.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -52,6 +53,10 @@ fun MovieGridItem(movie: Movie, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             var hasError by remember { mutableStateOf(false) }
+
+            val posterUrl = Constants.POSTER_IMAGE_BASE_URL + Constants.POSTER_IMAGE_WIDTH + movie.posterPath.orEmpty()
+            Log.d("PosterURL", "Movie: ${movie.title}, URL: $posterUrl")
+            Log.d("RawMovie", movie.toString())
 
             Box(
                 modifier = Modifier
