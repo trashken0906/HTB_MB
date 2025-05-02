@@ -46,20 +46,6 @@ fun AppNavGraph(navController: NavHostController, movieList: List<Movie>, viewMo
             )
         }
 
-        //Movie Details screen
-        composable(
-            route = Screen.MovieReview.route,
-            arguments = listOf(navArgument("movieId") { type = NavType.LongType })
-        ) { backStackEntry ->
-            val movieId = backStackEntry.arguments?.getLong("movieId") ?: 0L
-
-            MovieDetailsScreen(
-                navController = navController,
-                viewModel = viewModel,
-                movieId = movieId,
-                apiKey = API_KEY
-            )
-        }
 
         // Movie Review & Video Screen
         composable(

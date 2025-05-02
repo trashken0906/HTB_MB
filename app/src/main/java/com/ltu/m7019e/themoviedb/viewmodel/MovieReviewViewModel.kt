@@ -18,7 +18,7 @@ class MovieReviewViewModel : ViewModel() {
     private val _videos = MutableStateFlow<List<Video>>(emptyList())
     val videos: StateFlow<List<Video>> = _videos
 
-    fun fetchMovieDetails(movieId: Long, apiKey: String) {
+    fun fetchMovieDetails(movieId: Long) {
         viewModelScope.launch {
             try {
                 val reviewResponse = RetrofitInstance.api.getMovieReviews(movieId, SECRETS.API_KEY)

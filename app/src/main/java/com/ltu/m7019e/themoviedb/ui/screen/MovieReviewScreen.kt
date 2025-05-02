@@ -27,7 +27,7 @@ fun MovieReviewScreen(
 
     // Fetch the movie details (reviews + videos) once when screen loads
     LaunchedEffect(movieId) {
-        viewModel.fetchMovieDetails(movieId, apiKey)
+        viewModel.fetchMovieDetails(movieId)
     }
 
     Column(

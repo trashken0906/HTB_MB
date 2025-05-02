@@ -3,7 +3,6 @@ package com.ltu.m7019e.themoviedb.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.ltu.m7019e.themoviedb.data.MovieDBUIState
 import com.ltu.m7019e.themoviedb.model.MovieDetail
 import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.network.RetrofitInstance
@@ -21,11 +20,12 @@ class MovieDBViewModel : ViewModel() {
     private val _movieList = MutableStateFlow<List<Movie>>(emptyList())
     val movieList: StateFlow<List<Movie>> = _movieList
 
-    private val _uiState = MutableStateFlow(MovieDBUIState())
-    val uiState: StateFlow<MovieDBUIState> = _uiState.asStateFlow()
+    private val _selectedMovie = MutableStateFlow<Movie?>(null)
+    val selectedMovie: StateFlow<Movie?> = _selectedMovie
 
     private val _movieDetail = MutableStateFlow<MovieDetail?>(null)
     val movieDetail: StateFlow<MovieDetail?> = _movieDetail
+
 
     init {
         fetchPopularMovies()
@@ -43,9 +43,7 @@ class MovieDBViewModel : ViewModel() {
     }
 
     fun setSelectedMovie(movie: Movie) {
-        _uiState.update { currentState ->
-            currentState.copy(selectedMovie = movie)
-        }
+        _selectedMovie.value = movie
     }
 
     fun fetchMovieDetail(movieId: Long, apiKey: String) {
