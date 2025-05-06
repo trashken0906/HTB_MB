@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.ltu.m7019e.themoviedb.model.Movie
@@ -25,21 +29,67 @@ import com.ltu.m7019e.themoviedb.utils.Constants
 @Composable
 fun MovieGridScreen(
     movieList: List<Movie>,
-    onMovieClick: (Long) -> Unit
+    isOffline: Boolean,
+    onMovieClick: (Long) -> Unit,
+    currentViewType: String,
+    onViewTypeChange: (String) -> Unit
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        items(movieList) { movie ->
-            MovieGridItem(
-                movie = movie,
-                onClick = { onMovieClick(movie.id) }
-            )
+    Column {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+            Button(onClick = { expanded = true }) {
+                Text("Showing: ${currentViewType.replaceFirstChar { it.uppercase() }}")
+            }
+
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(onClick = {
+                    onViewTypeChange("popular")
+                    expanded = false
+                }, text = { Text("Popular") })
+
+                DropdownMenuItem(onClick = {
+                    onViewTypeChange("top_rated")
+                    expanded = false
+                }, text = { Text("Top Rated") })
+
+                DropdownMenuItem(onClick = {
+                    onViewTypeChange("favorites")
+                    expanded = false
+                }, text = { Text("Favorites") })
+            }
         }
     }
+
+    if (isOffline && currentViewType != "favorites") {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "No Internet Connection",
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
+        }
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            items(movieList) { movie ->
+                MovieGridItem(
+                    movie = movie,
+                    onClick = { onMovieClick(movie.id) }
+                )
+            }
+        }
+    }
+
 }
 
 

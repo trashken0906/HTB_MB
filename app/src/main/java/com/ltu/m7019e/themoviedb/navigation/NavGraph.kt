@@ -1,6 +1,8 @@
 package com.ltu.m7019e.themoviedb.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -15,19 +17,28 @@ import com.ltu.m7019e.themoviedb.utils.SECRETS.API_KEY
 import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController, movieList: List<Movie>, viewModel: MovieDBViewModel) {
+fun AppNavGraph(navController: NavHostController,
+                movieList: List<Movie>,
+                viewModel: MovieDBViewModel,
+                currentViewType: String,
+                onViewTypeChange: (String) -> Unit) {
+    val isOffline by viewModel.isOffline.collectAsState()
+
     NavHost(navController = navController, startDestination = Screen.Home.route)
     {
         //Home = Grid screen
         composable(route = Screen.Home.route) {
             MovieGridScreen(
                 movieList = movieList,
+                isOffline = isOffline,
                 onMovieClick = { movieId ->
                     val selected = movieList.find { it.id == movieId }
                     if (selected != null)
                         viewModel.setSelectedMovie(selected)
                     navController.navigate(Screen.MovieDetails.createRoute(movieId))
-                }
+                },
+                currentViewType = currentViewType,
+                onViewTypeChange = onViewTypeChange
             )
         }
 

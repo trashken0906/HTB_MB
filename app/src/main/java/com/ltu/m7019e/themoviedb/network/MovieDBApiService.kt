@@ -17,6 +17,12 @@ interface MovieDBApiService {
         apiKey: String = Constants.API_KEY
     ): MovieResponse
 
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovies(
+        @Query("api_key")
+        apiKey: String = Constants.API_KEY
+    ): MovieResponse
+
     @GET("movie/{movie_id}")
     suspend fun getMovieDetail(
         @Path("movie_id") movieId: Long,

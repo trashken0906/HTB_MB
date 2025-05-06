@@ -13,6 +13,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import com.ltu.m7019e.themoviedb.database.toFavoriteEntity
 import com.ltu.m7019e.themoviedb.navigation.Screen
 import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
 
@@ -28,15 +30,36 @@ fun MovieDetailsScreen(
 ) {
     val movie by viewModel.movieDetail.collectAsState()
     val context = LocalContext.current
+    var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(movieId) {
         viewModel.fetchMovieDetail(movieId, apiKey)
+        isFavorite = viewModel.isFavorite(movieId)
     }
 
     Column(modifier = Modifier.padding(16.dp)) {
         if (movie != null) {
             Text(text = movie!!.title, style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                Text("Favorite")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(
+                    checked = isFavorite,
+                    onCheckedChange = { checked ->
+                        isFavorite = checked
+                        if (checked) {
+                            viewModel.saveFavorite(movie!!.toFavoriteEntity())
+                        } else {
+                            viewModel.removeFavorite(movieId)
+                        }
+                    }
+                )
+            }
 
             Text(text = "Genres:", style = MaterialTheme.typography.titleMedium)
             Text(text = movie!!.genres.joinToString(", ") { it.name })
