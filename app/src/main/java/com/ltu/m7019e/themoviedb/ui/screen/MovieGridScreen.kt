@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import com.ltu.m7019e.themoviedb.model.Movie
 import com.ltu.m7019e.themoviedb.utils.Constants
@@ -34,32 +35,35 @@ fun MovieGridScreen(
     currentViewType: String,
     onViewTypeChange: (String) -> Unit
 ) {
-    Column {
-        var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
 
-        Box(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-            Button(onClick = { expanded = true }) {
-                Text("Showing: ${currentViewType.replaceFirstChar { it.uppercase() }}")
-            }
+    Box(modifier = Modifier.fillMaxWidth().padding(8.dp).zIndex(1f)) {
+        Button(onClick = { expanded = true }) {
+            Text("Showing: ${currentViewType.replaceFirstChar { it.uppercase() }}")
+        }
 
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(onClick = {
-                    onViewTypeChange("popular")
-                    expanded = false
-                }, text = { Text("Popular") })
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.zIndex(2f)) {
+            DropdownMenuItem(onClick = {
+                onViewTypeChange("popular")
+                expanded = false
+            }, text = { Text("Popular") })
 
-                DropdownMenuItem(onClick = {
-                    onViewTypeChange("top_rated")
-                    expanded = false
-                }, text = { Text("Top Rated") })
+            DropdownMenuItem(onClick = {
+                onViewTypeChange("top_rated")
+                expanded = false
+            }, text = { Text("Top Rated") })
 
-                DropdownMenuItem(onClick = {
-                    onViewTypeChange("favorites")
-                    expanded = false
-                }, text = { Text("Favorites") })
-            }
+            DropdownMenuItem(onClick = {
+                onViewTypeChange("favorites")
+                expanded = false
+            }, text = { Text("Favorites") })
         }
     }
+
+    //Spacer(modifier = Modifier.height(8.dp))
 
     if (isOffline && currentViewType != "favorites") {
         Box(

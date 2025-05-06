@@ -15,25 +15,38 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ltu.m7019e.themoviedb.ui.theme.TheMovieDBTheme
 import androidx.navigation.compose.rememberNavController
 import com.ltu.m7019e.themoviedb.database.MovieDao
+import com.ltu.m7019e.themoviedb.database.MovieDatabase
 import com.ltu.m7019e.themoviedb.database.MovieRepository
 import com.ltu.m7019e.themoviedb.navigation.AppNavGraph
 import com.ltu.m7019e.themoviedb.network.MovieDBApiService
+import com.ltu.m7019e.themoviedb.network.NetworkMonitor
+import com.ltu.m7019e.themoviedb.network.RetrofitInstance
 import com.ltu.m7019e.themoviedb.utils.SECRETS
 import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
+import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModelFactory
 
 
     class MainActivity : ComponentActivity() {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            val database = MovieDatabase.getDatabase(applicationContext)
+            val movieDao = database.movieDao()
+            val apiService = RetrofitInstance.api
 
-            //val repository = MovieRepository(apiService = MovieDBApiService, movieDao = MovieDao)
+            val repository = MovieRepository(movieDao, apiService)
+            val networkMonitor = NetworkMonitor(applicationContext)
+
+            val factory = MovieDBViewModelFactory(repository, networkMonitor)
+
             setContent {
+                val viewModel: MovieDBViewModel = viewModel(factory = factory)
+
                 TheMovieDBTheme {
                     Surface (
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                    TheMovieDBApp()
+                    TheMovieDBApp(viewModel = viewModel)
                 }
             }
         }
@@ -41,9 +54,9 @@ import com.ltu.m7019e.themoviedb.viewmodel.MovieDBViewModel
     }
 
 @Composable
-fun TheMovieDBApp(){
+fun TheMovieDBApp(viewModel: MovieDBViewModel){
     val navController = rememberNavController()
-    val viewModel: MovieDBViewModel = viewModel()
+    //val viewModel: MovieDBViewModel = viewModel()
     val movieList by viewModel.movieList.collectAsState()
     val currentViewType by viewModel.currentViewType.collectAsState()
 

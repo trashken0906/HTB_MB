@@ -21,6 +21,8 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 retrofitVersion = "2.11.0"
 roomCommonJvm = "2.7.1"
 roomRuntimeAndroid = "2.7.1"
+roomCompiler = "2.7.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,6 +54,7 @@ retrofit-v2110 = { module = "com.squareup.retrofit2:retrofit", version.ref = "re
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 
 
 
